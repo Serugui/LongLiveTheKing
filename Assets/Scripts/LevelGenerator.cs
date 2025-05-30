@@ -6,7 +6,7 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] int startingChunksAmount = 12;
     [SerializeField] Transform chunkParent;
     [SerializeField] float chunkLength = 10f; // Length of each chunk, serialized for adjustment if prefabs is bigger or smaller
-
+    [SerializeField] float moveSpeed = 8f; // Speed at which the chunks will move
     GameObject[] chunks = new GameObject[12];
 
     void Start()
@@ -14,7 +14,12 @@ public class LevelGenerator : MonoBehaviour
         SpawnChunks();
     }
 
-    private void SpawnChunks()
+    void Update()
+    {
+        MoveChunks();
+    }
+
+    void SpawnChunks()
     {
         for (int i = 0; i < startingChunksAmount; i++)
         {
@@ -27,7 +32,7 @@ public class LevelGenerator : MonoBehaviour
     
     }
 
-    private float CalculateSpawnPositionZ(int i)
+    float CalculateSpawnPositionZ(int i)
     {
         float spawnPositionZ;
 
@@ -40,5 +45,13 @@ public class LevelGenerator : MonoBehaviour
             spawnPositionZ = transform.position.z + (i* chunkLength);
         }
         return spawnPositionZ;
+    }
+
+    void MoveChunks()
+    {
+        for (int i = 0; i < chunks.Length; i++)
+        {
+            chunks[i].transform.Translate(-transform.forward * (moveSpeed *Time.deltaTime)); // Move chunks backwards at a speed of deltaTime
+        }
     }
 }
